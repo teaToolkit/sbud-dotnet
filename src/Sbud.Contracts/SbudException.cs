@@ -4,7 +4,7 @@ namespace Sbud;
 /// A request the service refused or could not answer. <see cref="Kind"/> is the problem kind the service sent,
 /// such as <c>not-found</c>, or <c>unavailable</c> when the service did not answer at all.
 /// </summary>
-public sealed class SbudException(string kind, string title, int? status = null, Exception? inner = null)
+public sealed class SbudException(string kind, string title, int? status = null, Exception? inner = null, IReadOnlyList<FieldError>? errors = null)
 	: Exception(title, inner)
 {
 	/// <summary>The problem kind, such as <c>refused</c> or <c>unavailable</c>.</summary>
@@ -12,4 +12,7 @@ public sealed class SbudException(string kind, string title, int? status = null,
 
 	/// <summary>The HTTP status, or null when the service did not answer.</summary>
 	public int? Status { get; } = status;
+
+	/// <summary>Every faulty field, when the kind is <c>invalid</c>; otherwise empty.</summary>
+	public IReadOnlyList<FieldError> Errors { get; } = errors ?? [];
 }
